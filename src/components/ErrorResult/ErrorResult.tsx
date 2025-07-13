@@ -1,9 +1,9 @@
-import React from 'react';
+import styles from './ErrorResult.module.css';
 
 interface ErrorResultProps {
   error: string;
 }
 
 export default function ErrorResult({ error }: ErrorResultProps) {
-  return <div>{error}</div>;
+  return <div className={styles.error}>{error}</div>;
 }

@@ -1,0 +1,16 @@
+.search {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  padding: 10px;
+  color: #fff;
+  font-size: 15px;
+  background: #383838;
+}
+.btn {
+  padding: 10px;
+}

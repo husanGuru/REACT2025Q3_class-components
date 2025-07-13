@@ -1,0 +1,8 @@
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  color: rgb(228, 70, 70);
+  flex-grow: 1;
+}

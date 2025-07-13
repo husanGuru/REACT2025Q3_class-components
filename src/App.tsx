@@ -3,10 +3,9 @@ import ErrorResult from './components/ErrorResult/ErrorResult';
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import Result from './components/Result/Result';
 import Search from './components/Search/Search';
-import { getSearch } from './utils/storage';
+import { getSearch, setSearch } from './utils/storage';
 import { getCharacters } from './api/startrek';
 
-import './App.css';
 import Loading from './components/Loading/Loading';
 
 interface AppState {
@@ -31,33 +30,24 @@ class App extends Component<Record<never, never>, AppState> {
   }
 
   componentDidMount() {
-    console.log('App mounted');
     this.fetchChatacters(this.state.searchTerm);
-    // Initialize something if needed
   }
 
   componentDidUpdate(_: unknown, prevState: AppState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
-      console.log('Search term changed:', this.state.searchTerm);
-
       this.fetchChatacters(this.state.searchTerm);
     }
   }
 
-  componentWillUnmount() {
-    console.log('App will unmount');
-    // Cleanups here
-  }
-
   handleSearchChange(newTerm: string) {
     this.setState({ searchTerm: newTerm.trim() });
+    setSearch(newTerm.trim());
   }
 
   async fetchChatacters(searchTerm: string) {
     this.setState({ isLoading: true });
     try {
       const fetchedCharacters = await getCharacters(searchTerm);
-      console.log(fetchedCharacters);
 
       this.setState({ characters: fetchedCharacters.characters });
     } catch (error: unknown) {
@@ -73,16 +63,18 @@ class App extends Component<Record<never, never>, AppState> {
   render() {
     return (
       <ErrorBoundary>
-        <div>
+        <>
           {/* Assuming Search accepts onChange as a prop */}
           <Search onChange={this.handleSearchChange} />
-          {this.state.isLoading ? (
+
+          {this.state.error ? (
+            <ErrorResult error={this.state.error} />
+          ) : this.state.isLoading ? (
             <Loading />
           ) : (
             <Result characters={this.state.characters} />
           )}
-          {this.state.error && <ErrorResult error={this.state.error} />}
-        </div>
+        </>
       </ErrorBoundary>
     );
   }
