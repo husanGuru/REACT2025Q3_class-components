@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Character } from '../../types/character.type';
 
 import styles from './Result.module.css';
