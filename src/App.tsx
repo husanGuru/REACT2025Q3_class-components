@@ -65,7 +65,10 @@ class App extends Component<Record<never, never>, AppState> {
       <ErrorBoundary>
         <>
           {/* Assuming Search accepts onChange as a prop */}
-          <Search onChange={this.handleSearchChange} />
+          <Search
+            onChange={this.handleSearchChange}
+            value={this.state.searchTerm}
+          />
 
           {this.state.error ? (
             <ErrorResult error={this.state.error} />
