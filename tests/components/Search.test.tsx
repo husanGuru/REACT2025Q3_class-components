@@ -4,13 +4,11 @@ import userEvent from '@testing-library/user-event';
 
 import Search from '../../src/components/Search/Search';
 
-const STORAGE_TOKEN = 'search';
-
 describe('Search', () => {
-  const setup = async () => {
+  const setup = async (value = '') => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Search onChange={onChange} />);
+    render(<Search onChange={onChange} value={value} />);
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /search/i });
     return { user, input, button, onChange };
@@ -23,16 +21,14 @@ describe('Search', () => {
     expect(button).toBeInTheDocument();
   });
 
-  it('should display previously saved search term from localStorage on mount', async () => {
-    const searchTerm = 'search term';
-    localStorage.setItem(STORAGE_TOKEN, searchTerm);
-    render(<Search onChange={() => {}} />);
-    const input = screen.getByRole('textbox') as HTMLInputElement;
-    expect(input.value).toBe(searchTerm);
+  it('should display initial value from props', async () => {
+    const searchTerm = 'initial search';
+    const { input } = await setup(searchTerm);
+    expect((input as HTMLInputElement).value).toBe(searchTerm);
   });
 
   it('should show empty input when no saved term exists', () => {
-    render(<Search onChange={() => {}} />);
+    render(<Search onChange={() => {}} value="" />);
     const input = screen.getByRole('textbox') as HTMLInputElement;
     expect(input.value).toBe('');
   });
@@ -46,25 +42,13 @@ describe('Search', () => {
     expect((input as HTMLInputElement).value).toBe(userInput);
   });
 
-  it('should save search term to localStorage when search button is clicked', async () => {
-    const { user, input, button } = await setup();
-    const userInput = 'test input';
+  it('should call onChange with current input value when search button is clicked', async () => {
+    const { user, input, button, onChange } = await setup('initial');
 
-    await user.type(input, userInput);
+    await user.clear(input);
+    await user.type(input, 'updated search');
     await user.click(button);
 
-    expect(localStorage.getItem(STORAGE_TOKEN)).toBe(userInput);
-  });
-
-  it('should call onChange with empty string when input is empty', async () => {
-    const handleChange = vi.fn();
-    const user = userEvent.setup();
-
-    render(<Search onChange={handleChange} />);
-
-    const button = screen.getByRole('button', { name: /search/i });
-    await user.click(button);
-
-    expect(handleChange).toHaveBeenCalledWith('');
+    expect(onChange).toHaveBeenCalledWith('updated search');
   });
 });
