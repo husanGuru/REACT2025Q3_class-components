@@ -7,6 +7,7 @@ import { getSearch, setSearch } from './utils/storage';
 import { getCharacters } from './api/startrek';
 
 import Loading from './components/Loading/Loading';
+import ErrorButton from './components/ErrorButton/ErrorButton';
 
 interface AppState {
   searchTerm: string;
@@ -65,7 +66,10 @@ class App extends Component<Record<never, never>, AppState> {
       <ErrorBoundary>
         <>
           {/* Assuming Search accepts onChange as a prop */}
-          <Search onChange={this.handleSearchChange} />
+          <Search
+            onChange={this.handleSearchChange}
+            value={this.state.searchTerm}
+          />
 
           {this.state.error ? (
             <ErrorResult error={this.state.error} />
@@ -74,6 +78,8 @@ class App extends Component<Record<never, never>, AppState> {
           ) : (
             <Result characters={this.state.characters} />
           )}
+
+          <ErrorButton />
         </>
       </ErrorBoundary>
     );

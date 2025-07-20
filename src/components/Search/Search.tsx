@@ -1,27 +1,48 @@
-import { useRef } from 'react';
+import { Component, type ChangeEvent } from 'react';
 
 import styles from './Search.module.css';
 
 interface SearchProps {
   onChange: (searchTerm: string) => void;
+  value: string;
 }
-export default function Search({ onChange }: SearchProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  return (
-    <div className={styles.search}>
-      <input
-        className={styles.input}
-        type="text"
-        placeholder="Enter search text"
-        ref={inputRef}
-      />
-      <button
-        className={styles.btn}
-        onClick={() => onChange(inputRef.current?.value || '')}
-      >
-        Search
-      </button>
-    </div>
-  );
+interface SearchState {
+  input: string;
+}
+
+export default class Search extends Component<SearchProps, SearchState> {
+  constructor(props: SearchProps) {
+    super(props);
+
+    this.state = {
+      input: props.value || '',
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    this.setState({ input: e.target.value });
+  }
+
+  render() {
+    return (
+      <div className={styles.search}>
+        <input
+          className={styles.input}
+          type="text"
+          placeholder="Enter search text"
+          value={this.state.input}
+          onChange={this.handleInputChange}
+        />
+        <button
+          className={styles.btn}
+          onClick={() => this.props.onChange(this.state.input)}
+        >
+          Search
+        </button>
+      </div>
+    );
+  }
 }
