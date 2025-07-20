@@ -31,12 +31,12 @@ class App extends Component<Record<never, never>, AppState> {
   }
 
   componentDidMount() {
-    this.fetchChatacters(this.state.searchTerm);
+    this.fetchCharacters(this.state.searchTerm);
   }
 
   componentDidUpdate(_: unknown, prevState: AppState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
-      this.fetchChatacters(this.state.searchTerm);
+      this.fetchCharacters(this.state.searchTerm);
     }
   }
 
@@ -45,7 +45,7 @@ class App extends Component<Record<never, never>, AppState> {
     setSearch(newTerm.trim());
   }
 
-  async fetchChatacters(searchTerm: string) {
+  async fetchCharacters(searchTerm: string) {
     this.setState({ isLoading: true });
     try {
       const fetchedCharacters = await getCharacters(searchTerm);
