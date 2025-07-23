@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import ErrorResult from './components/ErrorResult/ErrorResult';
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import Result from './components/Result/Result';
@@ -7,83 +7,54 @@ import { getSearch, setSearch } from './utils/storage';
 import { getCharacters } from './api/startrek';
 
 import Loading from './components/Loading/Loading';
-import ErrorButton from './components/ErrorButton/ErrorButton';
 
-interface AppState {
-  searchTerm: string;
-  characters: [];
-  isLoading: boolean;
-  error: string | null;
-}
+function App() {
+  const [searchTerm, setSearchTerm] = useState(getSearch() ?? '');
+  const [characters, setCharacters] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-class App extends Component<Record<never, never>, AppState> {
-  constructor(props: Record<never, never>) {
-    super(props);
+  useEffect(() => {
+    async function fetchCharacters(searchTerm: string) {
+      setIsLoading(true);
 
-    this.state = {
-      searchTerm: getSearch(),
-      characters: [],
-      isLoading: false,
-      error: null,
-    };
+      try {
+        const fetchedCharacters = await getCharacters(searchTerm);
 
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-  }
-
-  componentDidMount() {
-    this.fetchCharacters(this.state.searchTerm);
-  }
-
-  componentDidUpdate(_: unknown, prevState: AppState) {
-    if (prevState.searchTerm !== this.state.searchTerm) {
-      this.fetchCharacters(this.state.searchTerm);
+        setCharacters(fetchedCharacters.characters);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+      setIsLoading(false);
     }
-  }
+    fetchCharacters(searchTerm);
+  }, [searchTerm]);
 
-  handleSearchChange(newTerm: string) {
-    this.setState({ searchTerm: newTerm.trim() });
+  function handleSearchChange(newTerm: string) {
+    setSearchTerm(newTerm.trim());
     setSearch(newTerm.trim());
   }
 
-  async fetchCharacters(searchTerm: string) {
-    this.setState({ isLoading: true });
-    try {
-      const fetchedCharacters = await getCharacters(searchTerm);
+  return (
+    <ErrorBoundary>
+      <>
+        {/* Assuming Search accepts onChange as a prop */}
+        <Search onChange={handleSearchChange} value={searchTerm} />
 
-      this.setState({ characters: fetchedCharacters.characters });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        this.setState({ error: error.message });
-      } else {
-        this.setState({ error: 'An unknown error occurred' });
-      }
-    }
-    this.setState({ isLoading: false });
-  }
-
-  render() {
-    return (
-      <ErrorBoundary>
-        <>
-          {/* Assuming Search accepts onChange as a prop */}
-          <Search
-            onChange={this.handleSearchChange}
-            value={this.state.searchTerm}
-          />
-
-          {this.state.error ? (
-            <ErrorResult error={this.state.error} />
-          ) : this.state.isLoading ? (
-            <Loading />
-          ) : (
-            <Result characters={this.state.characters} />
-          )}
-
-          <ErrorButton />
-        </>
-      </ErrorBoundary>
-    );
-  }
+        {error ? (
+          <ErrorResult error={error} />
+        ) : isLoading ? (
+          <Loading />
+        ) : (
+          <Result characters={characters} />
+        )}
+      </>
+    </ErrorBoundary>
+  );
 }
 
 export default App;
