@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import ErrorResult from './components/ErrorResult/ErrorResult';
-import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
-import Result from './components/Result/Result';
-import Search from './components/Search/Search';
-import { getSearch, setSearch } from './utils/storage';
-import { getCharacters } from './api/startrek';
+import Search from '../components/Search/Search';
+import ErrorResult from '../components/ErrorResult/ErrorResult';
+import Loading from '../components/Loading/Loading';
+import Result from '../components/Result/Result';
+import { getSearch, setSearch } from '../utils/storage';
+import { getCharacters } from '../api/startrek';
 
-import Loading from './components/Loading/Loading';
-
-function App() {
+export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState(getSearch() ?? '');
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,20 +38,16 @@ function App() {
   }
 
   return (
-    <ErrorBoundary>
-      <>
-        <Search onChange={handleSearchChange} value={searchTerm} />
+    <>
+      <Search onChange={handleSearchChange} value={searchTerm} />
 
-        {error ? (
-          <ErrorResult error={error} />
-        ) : isLoading ? (
-          <Loading />
-        ) : (
-          <Result characters={characters} />
-        )}
-      </>
-    </ErrorBoundary>
+      {error ? (
+        <ErrorResult error={error} />
+      ) : isLoading ? (
+        <Loading />
+      ) : (
+        <Result characters={characters} />
+      )}
+    </>
   );
 }
-
-export default App;
