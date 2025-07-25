@@ -2,11 +2,11 @@ import { useRouteError, isRouteErrorResponse } from 'react-router';
 
 import styles from './page.module.css';
 
-export default function ErorPage() {
+export default function ErrorPage() {
   const error = useRouteError();
 
   let title = 'Error occured';
-  let message = 'Something wend wrong';
+  let message = 'Something went wrong';
 
   if (isRouteErrorResponse(error)) {
     if (error.status === 500) {

@@ -1,5 +1,5 @@
 import { vi, describe, it, expect } from 'vitest';
-import { getCharacters } from '../src/api/startrek';
+import { getCharacters } from '../../src/api/startrek';
 
 describe('getCharacters', () => {
   const originalFetch = global.fetch;
