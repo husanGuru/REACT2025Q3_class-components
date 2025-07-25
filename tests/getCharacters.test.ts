@@ -17,10 +17,10 @@ describe('getCharacters', () => {
       json: () => Promise.resolve(mockData),
     });
 
-    const result = await getCharacters('Spock');
+    const result = await getCharacters({ searchTerm: 'Spock' });
 
     expect(fetch).toHaveBeenCalledWith(
-      'https://stapi.co/api/v1/rest/character/search',
+      'https://stapi.co/api/v1/rest/character/search?pageNumber=0&pageSize=10',
       {
         method: 'POST',
         body: 'name=Spock',
@@ -39,7 +39,7 @@ describe('getCharacters', () => {
       status: 500,
     });
 
-    await expect(getCharacters('Spock')).rejects.toThrow(
+    await expect(getCharacters({ searchTerm: 'Spock' })).rejects.toThrow(
       'HTTP error! status: 500'
     );
   });

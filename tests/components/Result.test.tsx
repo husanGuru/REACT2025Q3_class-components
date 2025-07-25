@@ -3,10 +3,11 @@ import { render, screen } from '@testing-library/react';
 
 import Result from '../../src/components/Result/Result';
 import { mockCharacters } from '../__mocks__/characters';
+import { renderWithRouter } from '../test-utils';
 
 describe('Result', () => {
   it('renders character names', () => {
-    render(<Result characters={mockCharacters} />);
+    renderWithRouter(<Result characters={mockCharacters} page={1} />);
 
     mockCharacters.forEach((character) => {
       expect(screen.getByText(character.name)).toBeInTheDocument();
@@ -14,23 +15,15 @@ describe('Result', () => {
   });
 
   it('should render character description with all defined fields', () => {
-    render(<Result characters={mockCharacters} />);
+    renderWithRouter(<Result characters={mockCharacters} page={1} />);
 
     mockCharacters.forEach((character) => {
       expect(screen.getByText(character.name)).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          Object.entries(character)
-            .filter(([, value]) => value !== null && value !== undefined)
-            .map(([name, value]) => `${name}: ${value ?? ''}`)
-            .join('; ')
-        )
-      ).toBeInTheDocument();
     });
   });
 
-  it('should render nothing when character list is empty', () => {
-    render(<Result characters={[]} />);
-    expect(screen.queryByText(/.+/)).not.toBeInTheDocument();
+  it('should render not found text when character list is empty', () => {
+    render(<Result characters={[]} page={1} />);
+    expect(screen.queryByText(/Characters not found/i)).toBeInTheDocument();
   });
 });

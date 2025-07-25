@@ -1,5 +1,7 @@
 import { useRouteError, isRouteErrorResponse } from 'react-router';
 
+import styles from './page.module.css';
+
 export default function ErorPage() {
   const error = useRouteError();
 
@@ -20,7 +22,7 @@ export default function ErorPage() {
   console.error(error);
 
   return (
-    <div>
+    <div className={styles.errorPage}>
       <h1>{title}</h1>
       <p>{message}</p>
     </div>

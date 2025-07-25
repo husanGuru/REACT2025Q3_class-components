@@ -8,3 +8,21 @@ body {
   background: #242424;
   color: #fff;
 }
+
+a {
+  color: #4da6ff; /* soft blue */
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    text-decoration 0.2s ease;
+}
+
+a:hover,
+a:focus {
+  color: #80ccff;
+  text-decoration: underline;
+}
+
+a:active {
+  color: #3399ff;
+}
