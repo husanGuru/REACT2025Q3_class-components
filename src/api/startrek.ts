@@ -1,6 +1,6 @@
 import { PAGE_LIMIT } from '../utils/const';
 
-const BASE_URL = `https://stapi.co/api/v1/rest/character/search`;
+const BASE_URL = `https://stapi.co/api/v1/rest/character`;
 
 interface getCharactersOptions {
   searchTerm?: string;
@@ -14,7 +14,7 @@ export async function getCharacters({
   const body = new URLSearchParams({ name: searchTerm }).toString();
 
   const response = await fetch(
-    `${BASE_URL}?pageNumber=${page}&pageSize=${PAGE_LIMIT}`,
+    `${BASE_URL}/search?pageNumber=${page}&pageSize=${PAGE_LIMIT}`,
     {
       method: 'POST',
       body: body,
@@ -23,6 +23,17 @@ export async function getCharacters({
       },
     }
   );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+
+  return result;
+}
+export async function getCharacterById(id: string) {
+  const response = await fetch(`${BASE_URL}?uid=${id}`);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

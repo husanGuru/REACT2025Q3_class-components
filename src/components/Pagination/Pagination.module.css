@@ -1,8 +1,23 @@
 .pagination {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  justify-content: center;
+
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .item {
+  padding: 5px;
+  transition: 0.5s;
+  cursor: pointer;
 }
 
 .active {
+  background: #000;
+  color: white;
+  padding: 7px;
 }

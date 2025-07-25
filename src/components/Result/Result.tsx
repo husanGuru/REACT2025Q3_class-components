@@ -1,24 +1,27 @@
+import { Link } from 'react-router';
 import type { Character } from '../../types/character.type';
 
 import styles from './Result.module.css';
 
 interface ResultProps {
   characters: Character[];
+  page: number;
 }
 
-export default function Result({ characters }: ResultProps) {
+export default function Result({ characters, page }: ResultProps) {
+  if (!characters || characters.length === 0) {
+    return <div className={styles.notFound}>Characters not found</div>;
+  }
   return (
     <div className={styles.result}>
       {characters.map((character) => (
-        <div key={character.uid} className={styles.item}>
+        <Link
+          key={character.uid}
+          className={styles.item}
+          to={`/character/${character.uid}?page=${page}`}
+        >
           <div className={styles.itemName}>{character.name}</div>
-          <div className={styles.itemDescription}>
-            {Object.entries(character)
-              .filter(([, value]) => value !== null && value !== undefined)
-              .map(([name, value]) => `${name}: ${value ?? ''}`)
-              .join('; ')}
-          </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
