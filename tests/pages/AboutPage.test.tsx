@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import AboutPage from '../../src/pages/AboutPage';
+import { renderWithRouter } from '../test-utils';
 
 describe('AboutPage', () => {
   it('renders heading and paragraph', () => {
-    render(<AboutPage />);
+    renderWithRouter(<AboutPage />, '/about');
 
     expect(
       screen.getByRole('heading', { name: /about author page/i })
@@ -14,7 +15,7 @@ describe('AboutPage', () => {
   });
 
   it('renders RS School link', () => {
-    render(<AboutPage />);
+    renderWithRouter(<AboutPage />, '/about');
 
     const link = screen.getByRole('link', { name: /rs school react course/i });
     expect(link).toBeInTheDocument();
