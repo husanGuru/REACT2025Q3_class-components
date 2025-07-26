@@ -4,7 +4,7 @@ import ErrorResult from '../components/ErrorResult/ErrorResult';
 import Loading from '../components/Loading/Loading';
 import Result from '../components/Result/Result';
 import { getCharacters } from '../api/startrek';
-import { Outlet, useSearchParams } from 'react-router';
+import { Link, Outlet, useSearchParams } from 'react-router';
 import Pagination from '../components/Pagination/Pagination';
 import useLocalStorage from '../hooks/useLocalStorage';
 
@@ -71,7 +71,7 @@ export default function MainPage() {
     <div className={styles.mainWrapper}>
       <div className={styles.mainPage}>
         <Search onChange={handleSearchChange} value={searchTerm} />
-
+        <Link to={'/about'}>About page</Link>
         {error ? (
           <ErrorResult error={error} />
         ) : isLoading ? (
