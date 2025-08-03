@@ -10,6 +10,7 @@ export default function ThemeToggler() {
       <input
         type="checkbox"
         id="theme-toggle"
+        aria-label="theme toggle"
         className={styles.input}
         onChange={() => toggleTheme()}
         checked={theme === 'dark'}

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Character } from '../types/character.type';
 
-interface SelectedCharactersStore {
+export interface SelectedCharactersStore {
   selectedCharacters: Character[];
   updateSelectedCharacters: (newCharacter: Character) => void;
   unselectAll: () => void;
