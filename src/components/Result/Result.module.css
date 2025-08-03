@@ -16,6 +16,10 @@
   text-decoration: none;
   color: white;
 }
+.item > a {
+  flex-grow: 1;
+}
+
 .itemName {
   flex: 1;
   border: 1px solid #ccc;
