@@ -24,6 +24,13 @@ export default function Pagination({
 
   return (
     <div className={styles.pagination}>
+      <button
+        className={styles.item}
+        onClick={() => onChange(page - 1)}
+        disabled={page <= 1}
+      >
+        {'<-'}
+      </button>
       {page > 1 && (
         <button
           key={1}
@@ -74,6 +81,13 @@ export default function Pagination({
           {totalPages}
         </button>
       )}
+      <button
+        className={styles.item}
+        onClick={() => onChange(page + 1)}
+        disabled={page >= totalPages}
+      >
+        {'->'}
+      </button>
     </div>
   );
 }

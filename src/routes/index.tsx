@@ -3,10 +3,12 @@ import MainPage from '../pages/MainPage';
 import AboutPage from '../pages/AboutPage';
 import CharacterPage from '../pages/CharacterPage';
 import ErrorPage from '../pages/ErrorPage';
+import Layout from '../layout/Layout';
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -19,9 +21,9 @@ const router = createBrowserRouter([
           },
         ],
       },
+      { path: '/about', element: <AboutPage /> },
     ],
   },
-  { path: '/about', element: <AboutPage /> },
 ]);
 
 export default router;

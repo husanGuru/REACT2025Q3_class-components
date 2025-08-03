@@ -4,11 +4,12 @@ import ErrorResult from '../components/ErrorResult/ErrorResult';
 import Loading from '../components/Loading/Loading';
 import Result from '../components/Result/Result';
 import { getCharacters } from '../api/startrek';
-import { Link, Outlet, useSearchParams } from 'react-router';
+import { Outlet, useSearchParams } from 'react-router';
 import Pagination from '../components/Pagination/Pagination';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 import styles from './page.module.css';
+import TotalSelected from '../components/TotalSelected/TotalSelected';
 
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,9 +27,11 @@ export default function MainPage() {
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', newPage.toString());
-      setSearchParams(params);
+      if (newPage > 0) {
+        const params = new URLSearchParams(searchParams);
+        params.set('page', newPage.toString());
+        setSearchParams(params);
+      }
     },
     [searchParams, setSearchParams]
   );
@@ -71,13 +74,16 @@ export default function MainPage() {
     <div className={styles.mainWrapper}>
       <div className={styles.mainPage}>
         <Search onChange={handleSearchChange} value={searchTerm} />
-        <Link to={'/about'}>About page</Link>
+
         {error ? (
           <ErrorResult error={error} />
         ) : isLoading ? (
           <Loading />
         ) : (
-          <Result characters={characters} page={page} />
+          <>
+            <Result characters={characters} page={page} />
+            <TotalSelected />
+          </>
         )}
         {totalPages && totalPages > 1 && (
           <Pagination

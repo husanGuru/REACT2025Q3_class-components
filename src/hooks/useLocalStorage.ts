@@ -5,15 +5,12 @@ interface UseLocalStorageProps<T> {
   initialValue: T;
 }
 
-type UseLocalStorageType = <T>(
+export default function useLocalStorage<T>(
   props: UseLocalStorageProps<T>
-) => [T, (val: T) => void];
+): [T, (value: T | ((prev: T) => T)) => void] {
+  const { key, initialValue } = props;
 
-const useLocalStorage: UseLocalStorageType = <T>({
-  key,
-  initialValue,
-}: UseLocalStorageProps<T>) => {
-  const [value, setValue] = useState<T>(() => {
+  const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = localStorage.getItem(key);
       return item ? (JSON.parse(item) as T) : initialValue;
@@ -22,12 +19,15 @@ const useLocalStorage: UseLocalStorageType = <T>({
     }
   });
 
-  function setStorageValue(newValue: T) {
-    setValue(newValue);
-    localStorage.setItem(key, JSON.stringify(newValue));
-  }
+  const setValue = (value: T | ((prev: T) => T)) => {
+    setStoredValue((prev) => {
+      const valueToStore =
+        typeof value === 'function' ? (value as (prev: T) => T)(prev) : value;
 
-  return [value, setStorageValue] as const;
-};
+      localStorage.setItem(key, JSON.stringify(valueToStore));
+      return valueToStore;
+    });
+  };
 
-export default useLocalStorage;
+  return [storedValue, setValue];
+}
