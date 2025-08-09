@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { Link, useParams } from 'react-router';
 
 import styles from './page.module.css';
-import { Character } from '../types/character.type';
-import { getCharacterById } from '../api/startrek';
 import ErrorResult from '../components/ErrorResult/ErrorResult';
+import useCharacter from '../hooks/useCharacter';
 
 export default function CharacterPage() {
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -15,30 +14,7 @@ export default function CharacterPage() {
   const [searchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1');
 
-  const [character, setCharacter] = useState<Character>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchCharacter() {
-      setIsLoading(true);
-      try {
-        if (id) {
-          const response = await getCharacterById(id);
-          setCharacter(response.character);
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred');
-        }
-      }
-      setIsLoading(false);
-    }
-
-    fetchCharacter();
-  }, [id]);
+  const { character, isLoading, error } = useCharacter(id);
 
   // Outside click handler
   useEffect(() => {

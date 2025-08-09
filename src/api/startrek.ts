@@ -1,7 +1,7 @@
 import { PAGE_LIMIT } from '../utils/const';
-import { StartrekData } from './startrek.types';
+import { StartrekData, StartrekSingleData } from './startrek.types';
 
-const BASE_URL = `https://stpi.co/api/v1/rest/character`;
+const BASE_URL = `https://stapi.co/api/v1/rest/character`;
 
 interface getCharactersOptions {
   searchTerm?: string;
@@ -31,14 +31,14 @@ export async function getCharacters({
 
   return response.json();
 }
-export async function getCharacterById(id: string) {
+export async function getCharacterById(
+  id: string
+): Promise<StartrekSingleData> {
   const response = await fetch(`${BASE_URL}?uid=${id}`);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const result = await response.json();
-
-  return result;
+  return response.json();
 }

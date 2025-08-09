@@ -6,3 +6,7 @@ export interface StartrekData {
   };
   characters: Character[];
 }
+
+export interface StartrekSingleData {
+  character: Character;
+}

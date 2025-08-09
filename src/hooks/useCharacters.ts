@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCharacters } from '../api/startrek';
+import { StartrekData } from '../api/startrek.types';
 
 interface UseCharactersProps {
   searchTerm: string;
@@ -10,7 +11,7 @@ export default function useCharacters({
   searchTerm,
   page,
 }: UseCharactersProps) {
-  const { isLoading, data, error } = useQuery({
+  const { isLoading, data, error } = useQuery<StartrekData>({
     queryKey: ['get characters', page, searchTerm],
     queryFn: () => getCharacters({ searchTerm, page: page - 1 }),
     retry: 1,
