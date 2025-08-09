@@ -1,4 +1,4 @@
-import type { Character } from '../../types/character.type';
+import type { Character } from '../../types/character.types';
 
 import styles from './Result.module.css';
 import ResultItem from './ResultItem';

@@ -5,10 +5,11 @@ import ErrorResult from '../../src/components/ErrorResult/ErrorResult';
 
 describe('ErrorResult', () => {
   it('should render provided error', () => {
-    const errorText = 'Some error';
+    const errorMessage = 'Some error';
+    const error = new Error(errorMessage);
 
-    render(<ErrorResult error={errorText} />);
+    render(<ErrorResult error={error} />);
 
-    expect(screen.getByText(errorText)).toBeInTheDocument();
+    expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
 });

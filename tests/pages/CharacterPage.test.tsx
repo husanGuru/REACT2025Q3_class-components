@@ -1,86 +1,63 @@
-import { describe, it, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router';
-import { getCharacterById } from '../../src/api/startrek';
+import { describe, it, vi, beforeEach, Mock } from 'vitest';
+import { screen, waitFor } from '@testing-library/react';
 import CharacterPage from '../../src/pages/CharacterPage';
+import { renderWithProviders } from '../test-utils';
+import useCharacter from '../../src/hooks/useCharacter';
 
-// ✅ Mock the API
-vi.mock('../../src/api/startrek', () => ({
-  getCharacterById: vi.fn(),
-}));
-
-const mockCharacter = {
-  id: '1',
-  name: 'Spock',
-  species: 'Vulcan',
-  rank: 'Commander',
+const RENDER_OPTIONS = {
+  route: '/character/1?page=1',
+  path: 'character/:id',
 };
+
+vi.mock('../../src/hooks/useCharacter', () => ({
+  default: vi.fn(),
+}));
 
 describe('CharacterPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders character details on successful fetch', async () => {
-    (getCharacterById as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      character: mockCharacter,
+  it('should show loading state', () => {
+    (useCharacter as Mock).mockReturnValue({
+      isLoading: true,
+      error: null,
+      character: null,
     });
 
-    render(
-      <MemoryRouter initialEntries={['/character/1?page=2']}>
-        <Routes>
-          <Route path="/character/:id" element={<CharacterPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderWithProviders(<CharacterPage />, RENDER_OPTIONS);
 
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  });
+
+  it('should render character details on successful fetch', async () => {
+    (useCharacter as Mock).mockReturnValue({
+      isLoading: false,
+      error: null,
+      character: { id: 1, name: 'Spock', rank: 'Commander' },
+    });
+
+    renderWithProviders(<CharacterPage />, RENDER_OPTIONS);
 
     await waitFor(() => {
       expect(screen.getByText(/Character Spock details/i)).toBeInTheDocument();
       expect(
-        screen.getByText(
-          /id: 1; name: Spock; species: Vulcan; rank: Commander/i
-        )
+        screen.getByText(/id: 1; name: Spock; rank: Commander/i)
       ).toBeInTheDocument();
     });
   });
 
-  it('renders error message on fetch failure', async () => {
-    (getCharacterById as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
-      new Error('Failed to fetch')
-    );
-
-    render(
-      <MemoryRouter initialEntries={['/character/1?page=1']}>
-        <Routes>
-          <Route path="/character/:id" element={<CharacterPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText(/failed to fetch/i)).toBeInTheDocument();
+  it('should render error message on fetch failure', async () => {
+    (useCharacter as Mock).mockReturnValue({
+      isLoading: false,
+      error: new Error('Something went wrong'),
+      character: null,
     });
-  });
 
-  it('renders fallback for unknown error', async () => {
-    (getCharacterById as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
-      'oops'
-    );
-
-    render(
-      <MemoryRouter initialEntries={['/character/1?page=1']}>
-        <Routes>
-          <Route path="/character/:id" element={<CharacterPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderWithProviders(<CharacterPage />, RENDER_OPTIONS);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/an unknown error occurred/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
     });
   });
 });

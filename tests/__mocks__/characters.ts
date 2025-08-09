@@ -1,4 +1,4 @@
-import { Character } from '../../src/types/character.type';
+import { Character } from '../../src/types/character.types';
 
 export const mockCharacters: Character[] = [
   {
