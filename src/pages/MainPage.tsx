@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import Search from '../components/Search/Search';
 import ErrorResult from '../components/ErrorResult/ErrorResult';
 import Loading from '../components/Loading/Loading';
 import Result from '../components/Result/Result';
-import { getCharacters } from '../api/startrek';
 import { Outlet, useSearchParams } from 'react-router';
 import Pagination from '../components/Pagination/Pagination';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 import styles from './page.module.css';
 import TotalSelected from '../components/TotalSelected/TotalSelected';
+import useCharacters from '../hooks/useCharacters';
 
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,10 +20,10 @@ export default function MainPage() {
     initialValue: '',
   });
 
-  const [totalPages, setTotalPages] = useState();
-  const [characters, setCharacters] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { isLoading, characters, totalPages, error } = useCharacters({
+    searchTerm,
+    page,
+  });
 
   const handlePageChange = useCallback(
     (newPage: number) => {
@@ -35,35 +35,6 @@ export default function MainPage() {
     },
     [searchParams, setSearchParams]
   );
-
-  useEffect(() => {
-    async function fetchCharacters(searchTerm: string) {
-      setIsLoading(true);
-
-      try {
-        const fetchedCharacters = await getCharacters({
-          searchTerm,
-          page: page - 1,
-        });
-
-        // if page number is greater than totalPages, set page=1
-        if (page > fetchedCharacters.page.totalPages) {
-          handlePageChange(1);
-        }
-
-        setTotalPages(fetchedCharacters.page.totalPages);
-        setCharacters(fetchedCharacters.characters);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred');
-        }
-      }
-      setIsLoading(false);
-    }
-    fetchCharacters(searchTerm);
-  }, [searchTerm, page, handlePageChange]);
 
   function handleSearchChange(newTerm: string) {
     handlePageChange(1);
