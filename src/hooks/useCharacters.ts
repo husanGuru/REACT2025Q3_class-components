@@ -13,7 +13,8 @@ export default function useCharacters({
 }: UseCharactersProps) {
   const { isLoading, data, error } = useQuery<StartrekData>({
     queryKey: ['get characters', page, searchTerm],
-    queryFn: () => getCharacters({ searchTerm, page: page - 1 }),
+    queryFn: ({ signal }) =>
+      getCharacters({ searchTerm, page: page - 1, signal }),
   });
 
   return {

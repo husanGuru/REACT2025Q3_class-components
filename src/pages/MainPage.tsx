@@ -28,12 +28,12 @@ export default function MainPage() {
   const handlePageChange = useCallback(
     (newPage: number) => {
       if (newPage > 0) {
-        const params = new URLSearchParams(searchParams);
+        const params = new URLSearchParams(window.location.search);
         params.set('page', newPage.toString());
         setSearchParams(params);
       }
     },
-    [searchParams, setSearchParams]
+    [setSearchParams]
   );
 
   function handleSearchChange(newTerm: string) {

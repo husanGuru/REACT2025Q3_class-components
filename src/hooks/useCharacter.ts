@@ -5,7 +5,7 @@ import { StartrekSingleData } from '../api/startrek.types';
 export default function useCharacter(id: string | undefined) {
   const { isLoading, data, error } = useQuery<StartrekSingleData>({
     queryKey: ['get character', id],
-    queryFn: () => getCharacterById(id as string),
+    queryFn: ({ signal }) => getCharacterById(id as string, signal),
     enabled: Boolean(id),
   });
 
