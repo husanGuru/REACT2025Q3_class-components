@@ -20,46 +20,62 @@ export default function MainPage() {
   });
 
   const [totalPages, setTotalPages] = useState();
-  const [characters, setCharacters] = useState([]);
+  const [characters, setCharacters] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(window.location.search);
       params.set('page', newPage.toString());
       setSearchParams(params);
     },
-    [searchParams, setSearchParams]
+    [setSearchParams]
   );
 
   useEffect(() => {
-    async function fetchCharacters(searchTerm: string) {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    async function fetchCharacters() {
       setIsLoading(true);
+      if (typeof searchTerm === 'string') {
+        try {
+          const fetchedCharacters = await getCharacters({
+            searchTerm,
+            page: page - 1,
+            signal,
+          });
 
-      try {
-        const fetchedCharacters = await getCharacters({
-          searchTerm,
-          page: page - 1,
-        });
+          // if page number is greater than totalPages, set page=1
+          if (page > fetchedCharacters.page.totalPages) {
+            handlePageChange(1);
+          }
 
-        // if page number is greater than totalPages, set page=1
-        if (page > fetchedCharacters.page.totalPages) {
-          handlePageChange(1);
-        }
-
-        setTotalPages(fetchedCharacters.page.totalPages);
-        setCharacters(fetchedCharacters.characters);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred');
+          setTotalPages(fetchedCharacters.page.totalPages);
+          setCharacters(fetchedCharacters.characters);
+        } catch (error: unknown) {
+          if (signal.aborted) {
+            console.log('Request aborted');
+          } else {
+            if (error instanceof Error) {
+              setError(error.message);
+            } else {
+              setError('An unknown error occurred');
+            }
+          }
+        } finally {
+          if (!signal.aborted) {
+            setIsLoading(false);
+          }
         }
       }
-      setIsLoading(false);
     }
-    fetchCharacters(searchTerm);
+    fetchCharacters();
+
+    return () => {
+      controller.abort();
+    };
   }, [searchTerm, page, handlePageChange]);
 
   function handleSearchChange(newTerm: string) {
@@ -77,7 +93,7 @@ export default function MainPage() {
         ) : isLoading ? (
           <Loading />
         ) : (
-          <Result characters={characters} page={page} />
+          characters && <Result characters={characters} page={page} />
         )}
         {totalPages && totalPages > 1 && (
           <Pagination
