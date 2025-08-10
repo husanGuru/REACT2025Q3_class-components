@@ -11,18 +11,19 @@ describe('getCharacterById', () => {
 
   it('should send GET request with correct param and returns data', async () => {
     const mockData = { character: { uid: '123', name: 'Spock' } };
+    const ctrl = new AbortController();
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockData),
     });
 
-    const result = await getCharacterById('123');
+    const result = await getCharacterById('123', ctrl.signal);
 
     expect(fetch).toHaveBeenCalledWith(
-      `https://stapi.co/api/v1/rest/character?uid=123`
+      `https://stapi.co/api/v1/rest/character?uid=123`,
+      { signal: ctrl.signal }
     );
-
     expect(result).toEqual(mockData);
   });
 

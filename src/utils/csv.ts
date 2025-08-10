@@ -1,4 +1,4 @@
-import { Character } from '../types/character.type';
+import { Character } from '../types/character.types';
 
 export function downloadCSV(items: Character[]) {
   if (!items.length) return;

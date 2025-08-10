@@ -1,10 +1,10 @@
 import { describe, vi, it, expect, beforeEach, Mock } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 
-import { renderWithRouter } from '../test-utils';
+import { renderWithProviders } from '../test-utils';
 import MainPage from '../../src/pages/MainPage';
 
-import { Character } from '../../src/types/character.type';
+import { Character } from '../../src/types/character.types';
 
 // Mock subcomponents
 vi.mock('../components/Search/Search', () => ({
@@ -79,7 +79,7 @@ describe('MainPage', () => {
       return new Promise(() => {}); // never resolves
     });
 
-    renderWithRouter(<MainPage />, '/?page=1');
+    renderWithProviders(<MainPage />);
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
@@ -87,7 +87,7 @@ describe('MainPage', () => {
   it('renders characters after fetch', async () => {
     (getCharacters as Mock).mockResolvedValue(mockCharacters);
 
-    renderWithRouter(<MainPage />, '/?page=1');
+    renderWithProviders(<MainPage />);
 
     await waitFor(() => {
       expect(screen.getByText('Spock')).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe('MainPage', () => {
   it('renders error on failure', async () => {
     (getCharacters as Mock).mockRejectedValue(new Error('API failed'));
 
-    renderWithRouter(<MainPage />, '/?page=1');
+    renderWithProviders(<MainPage />);
 
     await waitFor(() => {
       expect(screen.getByText(/API failed/)).toBeInTheDocument();
