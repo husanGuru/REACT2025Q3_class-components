@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Character } from '../../types/character.type';
+import { Character } from '../../types/character.types';
 
 import styles from './Result.module.css';
 import useSelectedCharacters from '../../store/selectedCharacters';

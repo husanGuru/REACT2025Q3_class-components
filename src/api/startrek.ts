@@ -1,16 +1,19 @@
 import { PAGE_LIMIT } from '../utils/const';
+import { StartrekData, StartrekSingleData } from './startrek.types';
 
 const BASE_URL = `https://stapi.co/api/v1/rest/character`;
 
 interface getCharactersOptions {
   searchTerm?: string;
   page?: number;
+  signal?: AbortSignal;
 }
 
 export async function getCharacters({
   searchTerm = '',
   page = 0,
-}: getCharactersOptions) {
+  signal,
+}: getCharactersOptions): Promise<StartrekData> {
   const body = new URLSearchParams({ name: searchTerm }).toString();
 
   const response = await fetch(
@@ -21,6 +24,7 @@ export async function getCharacters({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
+      signal,
     }
   );
 
@@ -28,18 +32,18 @@ export async function getCharacters({
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const result = await response.json();
-
-  return result;
+  return response.json();
 }
-export async function getCharacterById(id: string) {
-  const response = await fetch(`${BASE_URL}?uid=${id}`);
+
+export async function getCharacterById(
+  id: string,
+  signal?: AbortSignal
+): Promise<StartrekSingleData> {
+  const response = await fetch(`${BASE_URL}?uid=${id}`, { signal });
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  const result = await response.json();
-
-  return result;
+  return response.json();
 }

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Character } from '../types/character.type';
+import { Character } from '../types/character.types';
 
 export interface SelectedCharactersStore {
   selectedCharacters: Character[];
