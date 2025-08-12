@@ -10,8 +10,11 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import styles from './page.module.css';
 import TotalSelected from '../components/TotalSelected/TotalSelected';
 import useCharacters from '../hooks/useCharacters';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function MainPage() {
+  const queryClient = useQueryClient();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1');
 
@@ -20,7 +23,7 @@ export default function MainPage() {
     initialValue: '',
   });
 
-  const { isLoading, characters, totalPages, error } = useCharacters({
+  const { isLoading, characters, totalPages, error, refetch } = useCharacters({
     searchTerm,
     page,
   });
@@ -63,6 +66,15 @@ export default function MainPage() {
             onChange={handlePageChange}
           />
         )}
+        <button
+          onClick={() => {
+            queryClient.clear();
+            refetch();
+          }}
+          className={styles.clearBtn}
+        >
+          Clear cache and refetch
+        </button>
       </div>
       <Outlet />
     </div>
