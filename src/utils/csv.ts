@@ -1,29 +1,23 @@
+import { generateCSV } from '@/app/actions/generateCSV';
 import { Character } from '../types/character.types';
 
-export function downloadCSV(items: Character[]) {
-  if (!items.length) return;
+export async function downloadCSV(items: Character[]) {
+  const { base64Data, fileName, mimeType } = await generateCSV(items);
 
-  const headers = ['UID', 'Name', 'Gender', 'YearOfBirth', 'URL'];
-  const rows = items.map(({ uid, name, gender, yearOfBirth }) =>
-    [
-      uid,
-      name,
-      gender,
-      yearOfBirth,
-      `${window.location.origin}/character/${uid}`,
-    ]
-      .map((v) => `"${String(v).replace(/"/g, '""')}"`)
-      .join(',')
-  );
+  const byteCharacters = atob(base64Data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: mimeType });
 
-  const csvContent = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-  const filename = `${items.length}_items.csv`;
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
