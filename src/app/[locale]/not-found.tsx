@@ -1,9 +1,8 @@
 import CustomErrorPage from '@/components/CustomErrorPage/CustomErrorPage';
+import { useTranslations } from 'next-intl';
 
-import { getTranslations } from 'next-intl/server';
-
-export default async function NotFoundPage() {
-  const t = await getTranslations('NotFoundPage');
+export default function NotFoundPage() {
+  const t = useTranslations('NotFoundPage');
 
   return <CustomErrorPage title={t('title')} message={t('message')} />;
 }

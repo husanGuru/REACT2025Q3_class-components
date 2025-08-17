@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import styles from './page.module.css';
 import useCharacters from '@/hooks/useCharacters';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 import Search from '@/components/Search/Search';
@@ -13,9 +13,12 @@ import Result from '@/components/Result/Result';
 import TotalSelected from '@/components/TotalSelected/TotalSelected';
 import Pagination from '@/components/Pagination/Pagination';
 import { useQueryClient } from '@tanstack/react-query';
+import { usePathname, useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function HomePage() {
   const queryClient = useQueryClient();
+  const t = useTranslations('MainPage');
 
   const router = useRouter();
   const pathname = usePathname();
@@ -88,7 +91,7 @@ export default function HomePage() {
           }}
           className={styles.clearBtn}
         >
-          Clear cache and refetch
+          {t('Clear cache and refetch')}
         </button>
       </div>
     </div>

@@ -8,6 +8,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className={styles.layout}>
       <Navigation />
+
       {children}
     </div>
   );

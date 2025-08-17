@@ -3,15 +3,18 @@
 import ErrorResult from '@/components/ErrorResult/ErrorResult';
 import useCharacter from '@/hooks/useCharacter';
 import useClickOutside from '@/hooks/useClickOutside';
-import { Link } from '@/i18n/navigation';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import React, { useRef } from 'react';
 
 import styles from './page.module.css';
 import { formatCharacterDetails } from '@/utils/character';
+import { useTranslations } from 'next-intl';
 
 export default function CharacterPage() {
   const panelRef = useRef<HTMLDivElement | null>(null);
+
+  const t = useTranslations();
 
   const router = useRouter();
 
@@ -40,11 +43,11 @@ export default function CharacterPage() {
       {error ? (
         <ErrorResult error={error} />
       ) : isLoading ? (
-        <div>Loading...</div>
+        <div>{t('Loading')}</div>
       ) : (
         character && (
           <>
-            <h2>Character {character.name} details:</h2>
+            <h2>{t('Character details', { character: character.name })}</h2>
             <div className={styles.itemDescription}>
               {formatCharacterDetails(character)}
             </div>

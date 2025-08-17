@@ -1,13 +1,15 @@
 import React from 'react';
 
 import styles from './page.module.css';
+import { useTranslations } from 'next-intl';
 
 export default function AboutPage() {
+  const t = useTranslations('AboutPage');
   return (
     <div className={styles.aboutPage}>
-      <h1>About Author Page</h1>
-      <p>The author was in a bit of a hurry :)</p>
-      <a href="https://rs.school/courses/reactjs">RS School React Course</a>
+      <h1>{t('title')}</h1>
+      <p>{t('description')}</p>
+      <a href="https://rs.school/courses/reactjs">{t('schoolLink')}</a>
     </div>
   );
 }
