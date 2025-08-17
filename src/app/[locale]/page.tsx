@@ -12,8 +12,11 @@ import Loading from '@/components/Loading/Loading';
 import Result from '@/components/Result/Result';
 import TotalSelected from '@/components/TotalSelected/TotalSelected';
 import Pagination from '@/components/Pagination/Pagination';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function HomePage() {
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -24,7 +27,7 @@ export default function HomePage() {
     initialValue: '',
   });
 
-  const { isLoading, characters, totalPages, error } = useCharacters({
+  const { isLoading, characters, totalPages, error, refetch } = useCharacters({
     searchTerm,
     page,
   });
@@ -77,6 +80,16 @@ export default function HomePage() {
             onChange={handlePageChange}
           />
         )}
+
+        <button
+          onClick={() => {
+            queryClient.clear();
+            refetch();
+          }}
+          className={styles.clearBtn}
+        >
+          Clear cache and refetch
+        </button>
       </div>
     </div>
   );

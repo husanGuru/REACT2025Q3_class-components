@@ -23,7 +23,7 @@ export default function ResultItem({ character, page }: ResultItemProps) {
       />
       <Link
         key={character.uid}
-        href={`/character/${character.uid}?page=${page}`}
+        href={`/?characterId=${character.uid}&page=${page}`}
       >
         <div className={styles.itemName}>{character.name}</div>
       </Link>

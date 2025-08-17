@@ -4,7 +4,7 @@ import ErrorResult from '@/components/ErrorResult/ErrorResult';
 import useCharacter from '@/hooks/useCharacter';
 import useClickOutside from '@/hooks/useClickOutside';
 import { Link } from '@/i18n/navigation';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useRef } from 'react';
 
 import styles from './page.module.css';
@@ -15,8 +15,9 @@ export default function CharacterPage() {
 
   const router = useRouter();
 
-  const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
+  const id = searchParams.get('characterId') ?? '';
+
   const page = parseInt(searchParams.get('page') || '1');
 
   const { character, isLoading, error } = useCharacter(id);
@@ -28,6 +29,10 @@ export default function CharacterPage() {
 
   function handleClickOutside() {
     router.push(`/?page=${page}`);
+  }
+
+  if (!id) {
+    return;
   }
 
   return (

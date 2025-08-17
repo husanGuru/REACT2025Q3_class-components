@@ -8,9 +8,11 @@ import Providers from './providers';
 
 export default async function LocaleLayout({
   children,
+  character,
   params,
 }: {
   children: React.ReactNode;
+  character: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   // Ensure that the incoming `locale` is valid
@@ -24,7 +26,10 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider locale={locale}>
           <Providers>
-            <Layout>{children}</Layout>
+            <Layout>
+              {children}
+              {character}
+            </Layout>
           </Providers>
         </NextIntlClientProvider>
       </body>
