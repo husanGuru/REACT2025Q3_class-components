@@ -1,0 +1,19 @@
+.totalSelected {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.totalSelectedButtons {
+  display: flex;
+  gap: 5px;
+}
+
+.totalSelectedButtons > button {
+  padding: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}

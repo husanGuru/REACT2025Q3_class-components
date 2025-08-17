@@ -1,0 +1,27 @@
+{
+  "MainPage": {
+    "Enter search text": "Enter search text",
+    "Search": "Search",
+    "Clear cache and refetch": "Clear cache and refetch"
+  },
+  "AboutPage": {
+    "title": "About Author Page",
+    "description": "I’m a fullstack developer passionate about building modern, scalable web applications. I work with both frontend and backend technologies, creating seamless user experiences and reliable server-side solutions. My focus is on clean code, performance, and continuous learning.",
+    "schoolLink": "RS School React Course"
+  },
+  "NotFoundPage": {
+    "title": "Not Found!",
+    "message": "Could not find resource!"
+  },
+  "ErrorPage": {
+    "title": "Something went wrong",
+    "message": "Error Page",
+    "Try again": "Try again"
+  },
+  "Navigation": {
+    "Main": "Main",
+    "About": "About"
+  },
+  "Loading": "Loading",
+  "Character details": "Character {character} details:"
+}
