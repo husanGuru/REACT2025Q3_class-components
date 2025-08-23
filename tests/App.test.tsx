@@ -1,16 +1,11 @@
-import { expect, test } from 'vitest';
+import { it, expect, describe } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Page from '@/app/[locale]/page';
-import { NextIntlClientProvider } from 'next-intl';
+import App from '../src/App';
 
-import messages from '../messages/en.json';
+describe('App', () => {
+  it('should render App component', () => {
+    render(<App />);
 
-test('Page', () => {
-  render(
-    <NextIntlClientProvider locale="en" messages={messages}>
-      <Page />
-    </NextIntlClientProvider>
-  );
-
-  expect(screen.getByText(/Hello world!/i)).toBeInTheDocument();
+    expect(screen.getByText(/test/i)).toBeInTheDocument();
+  });
 });
