@@ -15,6 +15,11 @@ export default function Modal({ children, ref }: ModalProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    const modal = modalContentRef.current;
+    if (modal) {
+      modal.focus();
+    }
+
     function handleKeyPress(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         setOpen(false);
@@ -24,8 +29,18 @@ export default function Modal({ children, ref }: ModalProps) {
     document.addEventListener('keydown', handleKeyPress);
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
+
+      const activeElement = document.activeElement;
+
+      if (
+        modal &&
+        activeElement instanceof HTMLElement &&
+        modal.contains(activeElement)
+      ) {
+        activeElement.blur();
+      }
     };
-  }, [open]);
+  }, []);
 
   useClickOutside({ ref: modalContentRef, onClickOutside: handleModalClose });
 
@@ -54,7 +69,12 @@ export default function Modal({ children, ref }: ModalProps) {
 
   return createPortal(
     <div className={styles.modal}>
-      <div className={styles.modalContent} ref={modalContentRef}>
+      <div
+        className={styles.modalContent}
+        ref={modalContentRef}
+        role="dialog"
+        aria-modal="true"
+      >
         {children}
         <button className={styles.closeBtn} onClick={handleModalClose}>
           ✖
