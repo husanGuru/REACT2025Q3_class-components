@@ -106,6 +106,7 @@ export default function Form({ onSubmit }: FormProps) {
         label="Upload your picture"
         error={errors.image?.message}
         initialValue={getValues('imageBase64')}
+        name="image"
         onFileSelect={(file, base64) => {
           setValue('image', file, { shouldValidate: true });
 

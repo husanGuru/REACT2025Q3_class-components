@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "format:fix": "prettier --write .",
     "prepare": "husky && chmod ug+x .husky/*",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
