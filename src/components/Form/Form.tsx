@@ -42,6 +42,8 @@ export default function Form({ onSubmit }: FormProps) {
     onSubmit();
   };
 
+  console.log(errors);
+
   return (
     <form className={styles.form} onSubmit={handleSubmit(saveFormData)}>
       <h2>Form controlled</h2>
