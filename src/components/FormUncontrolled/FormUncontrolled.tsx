@@ -19,7 +19,7 @@ interface FormProps {
 }
 
 export default function FormUncontrolled({ onSubmit }: FormProps) {
-  const { countries } = useCountries();
+  const countries = useCountries((selector) => selector.countries);
   const updateFormData = useFormUncontrolledStore(
     (selector) => selector.updateForm
   );
@@ -34,6 +34,8 @@ export default function FormUncontrolled({ onSubmit }: FormProps) {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    console.log('submit');
 
     const newFormData = new FormData(e.currentTarget);
 
