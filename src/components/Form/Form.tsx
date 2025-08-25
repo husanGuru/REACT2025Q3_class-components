@@ -21,7 +21,7 @@ interface FormProps {
 }
 
 export default function Form({ onSubmit }: FormProps) {
-  const countries = useCountries((selecotor) => selecotor.countries);
+  const countries = useCountries((selector) => selector.countries);
   const updateForm = useFormStore((selector) => selector.updateForm);
   const formData = useFormStore((selector) => selector.form);
 
@@ -41,8 +41,6 @@ export default function Form({ onSubmit }: FormProps) {
     updateForm(data);
     onSubmit();
   };
-
-  console.log(errors);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(saveFormData)}>
