@@ -1,0 +1,44 @@
+:root {
+  --bg: #fff;
+  --text: #000;
+}
+
+:root[data-theme='dark'] {
+  --bg: #242424;
+  --text: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: #4da6ff; /* soft blue */
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    text-decoration 0.2s ease;
+}
+
+a:hover,
+a:focus {
+  color: #80ccff;
+  text-decoration: underline;
+}
+
+a:active {
+  color: #3399ff;
+}
+
+button {
+  cursor: pointer;
+}

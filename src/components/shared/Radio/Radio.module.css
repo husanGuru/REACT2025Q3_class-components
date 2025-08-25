@@ -1,0 +1,12 @@
+.radio {
+  margin-bottom: 10px;
+}
+
+.radio > p {
+}
+
+.radioWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

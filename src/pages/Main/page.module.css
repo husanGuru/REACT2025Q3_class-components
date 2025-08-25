@@ -1,0 +1,14 @@
+.btnWrapper {
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  padding: 5px;
+  font-size: 15px;
+  margin-block: 10px;
+}
+
+.result {
+  display: flex;
+  gap: 10px;
+}
