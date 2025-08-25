@@ -30,12 +30,11 @@ export default function FormUncontrolled({ onSubmit }: FormProps) {
     { [K in keyof FormFields]?: string } | null
   >(null);
 
+  const [file, setFile] = useState<File>();
   const [imageBase64, setImageBase64] = useState(formData?.imageBase64);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    console.log('submit');
 
     const newFormData = new FormData(e.currentTarget);
 
@@ -47,7 +46,7 @@ export default function FormUncontrolled({ onSubmit }: FormProps) {
       confirmPassword: newFormData.get('confirmPassword'),
       gender: newFormData.get('gender'),
       terms: newFormData.get('terms') ? true : false,
-      image: newFormData.get('image'),
+      image: file,
       country: newFormData.get('country'),
       imageBase64,
     };
@@ -55,7 +54,6 @@ export default function FormUncontrolled({ onSubmit }: FormProps) {
     const validateResult = formSchema.safeParse(data);
 
     if (!validateResult.success) {
-      console.log(validateResult.error.issues);
       const fieldErrors: { [K in keyof FormFields]?: string } = {};
 
       validateResult.error.issues.forEach((err) => {
@@ -142,6 +140,7 @@ export default function FormUncontrolled({ onSubmit }: FormProps) {
         name="image"
         initialValue={imageBase64}
         onFileSelect={(file, base64) => {
+          setFile(file);
           setImageBase64(base64);
         }}
       />
