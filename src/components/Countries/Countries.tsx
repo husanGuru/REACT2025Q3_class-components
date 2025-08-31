@@ -5,18 +5,36 @@ import CountryItem from './CountryItem/CountryItem';
 
 import styles from './Countries.module.css';
 import Columns from '../shared/Columns/Columns';
+import useSort from 'src/store/sort';
 
 interface CountriesProps {
   query: UseQueryResult<Country[]>;
+  search: string;
 }
 
-export default function Countries({ query }: CountriesProps) {
+export default function Countries({ query, search }: CountriesProps) {
   const countries = use(query.promise);
+
+  const sort = useSort((selector) => selector.sort);
+
+  let filteredCountries = search
+    ? countries.filter((country) =>
+        country.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+      )
+    : countries;
+
+  if (sort) {
+    filteredCountries = filteredCountries.sort((a, b) => {
+      return sort === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    });
+  }
 
   return (
     <div className={styles.countries}>
       <Columns columns={Object.keys(countries[0]).slice(0, -1)} />
-      {countries.map((country) => (
+      {filteredCountries.map((country) => (
         <CountryItem key={country.name} country={country} />
       ))}
     </div>
