@@ -1,6 +1,6 @@
 import { Country } from 'src/types/country.types';
 import { UseQueryResult } from '@tanstack/react-query';
-import { use } from 'react';
+import { use, useMemo } from 'react';
 import CountryItem from './CountryItem/CountryItem';
 
 import styles from './Countries.module.css';
@@ -17,19 +17,23 @@ export default function Countries({ query, search }: CountriesProps) {
 
   const sort = useSort((selector) => selector.sort);
 
-  let filteredCountries = search
-    ? countries.filter((country) =>
-        country.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-      )
-    : countries;
+  const filteredCountries = useMemo(() => {
+    let result = search
+      ? countries.filter((country) =>
+          country.name.toLowerCase().includes(search.toLowerCase())
+        )
+      : countries;
 
-  if (sort) {
-    filteredCountries = filteredCountries.sort((a, b) => {
-      return sort === 'asc'
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
-    });
-  }
+    if (sort) {
+      result = [...result].sort((a, b) =>
+        sort === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)
+      );
+    }
+
+    return result;
+  }, [countries, search, sort]);
 
   return (
     <div className={styles.countries}>

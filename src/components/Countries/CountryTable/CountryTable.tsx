@@ -4,7 +4,7 @@ import styles from './CountryTable.module.css';
 import Columns from 'src/components/shared/Columns/Columns';
 import useColumns from 'src/store/columns';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import Truncate from 'src/components/shared/Truncate/Truncate';
 import { formatPopulation } from 'src/utils/country';
 import useYear from 'src/store/year';
@@ -28,8 +28,10 @@ export default function CountryTable({ data }: CountryTableProps) {
     overscan: 5,
   });
 
-  const filteredData =
-    selectedYear && data.find((item) => item.year === selectedYear);
+  const filteredData = useMemo(
+    () => selectedYear && data.find((item) => item.year === selectedYear),
+    [data, selectedYear]
+  );
 
   return (
     <div className={styles.tableWrapper}>
