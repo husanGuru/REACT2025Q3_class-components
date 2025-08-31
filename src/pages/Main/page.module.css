@@ -12,3 +12,22 @@
   display: flex;
   gap: 10px;
 }
+
+.columnConfig {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.columns > span {
+  border: 1px solid #000;
+  padding: 2px;
+  font-size: 15px;
+  margin-block: 10px;
+}

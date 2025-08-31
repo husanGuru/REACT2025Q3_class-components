@@ -4,6 +4,5 @@ import Input from './Input/Input';
 import Modal from './Modal/Modal';
 import Radio from './Radio/Radio';
 import Select from './Select/Select';
-import SubmitButton from './SubmitButton/SubmitButton';
 
-export { Checkbox, ImageInput, Input, Modal, Radio, Select, SubmitButton };
+export { Checkbox, ImageInput, Input, Modal, Radio, Select };

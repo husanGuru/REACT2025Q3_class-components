@@ -1,0 +1,53 @@
+.country {
+  width: 100%;
+  position: relative;
+}
+
+.country:not(:last-of-type) {
+  border-bottom: 1px solid #000;
+}
+
+.summaryContent {
+  display: flex;
+  width: 100%;
+}
+.summaryContent > div {
+  flex: 3;
+  padding: 2px;
+}
+.summaryContent > div:first-of-type {
+  flex: 1;
+}
+
+.summaryContent > div:not(:last-of-type) {
+  border-right: 1px solid #000;
+}
+
+.table {
+  border-top: 1px solid #000;
+}
+
+.summary {
+  display: flex;
+  cursor: pointer;
+  width: 100%;
+}
+
+.summary::-webkit-details-marker {
+  display: none; /* Chrome, Safari */
+}
+
+.summary::marker {
+  display: none; /* Firefox */
+}
+
+.summary::before {
+  content: '▶'; /* closed arrow */
+  position: absolute;
+  left: 5px;
+  transition: transform 0.2s;
+}
+
+.country[open] .summary::before {
+  transform: rotate(90deg);
+}

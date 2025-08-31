@@ -1,8 +1,8 @@
 import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 import { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { ModalRef } from '../../../types/modal.types';
-import useClickOutside from '../../../hooks/useClickOutside';
+import { ModalRef } from 'src/types/modal.types';
+import useClickOutside from 'src/hooks/useClickOutside';
 
 interface ModalProps {
   children: React.ReactNode;
