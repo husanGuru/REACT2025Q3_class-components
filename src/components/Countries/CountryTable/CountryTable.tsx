@@ -1,7 +1,7 @@
 import { CO2Data } from 'src/types/country.types';
 import { NA } from 'src/utils/const';
 import styles from './CountryTable.module.css';
-import Columns from 'src/components/shared/Columns/Columns';
+import { Columns } from 'src/components/shared';
 import useColumns from 'src/store/columns';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useMemo, useRef } from 'react';

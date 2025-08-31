@@ -4,7 +4,7 @@ import { use, useMemo } from 'react';
 import CountryItem from './CountryItem/CountryItem';
 
 import styles from './Countries.module.css';
-import Columns from '../shared/Columns/Columns';
+import { Columns } from '../shared';
 import useSort from 'src/store/sort';
 
 interface CountriesProps {
