@@ -7,6 +7,7 @@ uncomment necessary lines in src\api\co2.ts
 Commit Duration: 0.2s
 Render Duration: 34.8ms
 Interactions:
+
 Flame Graph:
 Ranked Chart:
 

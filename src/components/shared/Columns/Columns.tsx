@@ -7,6 +7,7 @@ interface ColumnsProps {
 }
 export default function Columns({ columns }: ColumnsProps) {
   const { sort, updateSort } = useSort();
+
   return (
     <div className={styles.columns}>
       {columns.map((column) =>

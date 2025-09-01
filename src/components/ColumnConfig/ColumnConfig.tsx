@@ -3,6 +3,7 @@ import { COLUMNS } from 'src/utils/const';
 import styles from './ColumnConfig.module.css';
 import useColumns from 'src/store/columns';
 import { ModalRef } from 'src/types/modal.types';
+import { useCallback } from 'react';
 
 interface ColumnConfigProps {
   modalRef: React.RefObject<ModalRef | null>;
@@ -11,6 +12,18 @@ interface ColumnConfigProps {
 export default function ColumnConfig({ modalRef }: ColumnConfigProps) {
   const { columns, updateColumns } = useColumns();
 
+  const handleColumnChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = Array.from(
+        e.target.selectedOptions,
+        (option) => option.value
+      );
+
+      updateColumns(value);
+    },
+    [updateColumns]
+  );
+
   return (
     <div className={styles.config}>
       <select
@@ -18,14 +31,7 @@ export default function ColumnConfig({ modalRef }: ColumnConfigProps) {
         id="config"
         multiple
         value={columns}
-        onChange={(e) => {
-          const value = Array.from(
-            e.target.selectedOptions,
-            (option) => option.value
-          );
-
-          updateColumns(value);
-        }}
+        onChange={handleColumnChange}
       >
         {COLUMNS.map((column) => (
           <option key={column} value={column}>

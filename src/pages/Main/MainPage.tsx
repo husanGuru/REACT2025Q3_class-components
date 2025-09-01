@@ -5,13 +5,12 @@ import { Modal } from 'src/components/shared';
 import Loading from 'src/components/shared/Loading/Loading';
 import { ModalRef } from 'src/types/modal.types';
 import { useQuery } from '@tanstack/react-query';
-import { Suspense, useRef, useState } from 'react';
+import { Suspense, useCallback, useRef, useState } from 'react';
 
 import styles from './page.module.css';
 import useColumns from 'src/store/columns';
 import YearSelector from 'src/components/YearSelector/YearSelector';
 import Search from 'src/components/Search/Search';
-import Sort from 'src/components/Sort/Sort';
 
 export default function MainPage() {
   const modalRef = useRef<ModalRef>(null);
@@ -25,9 +24,9 @@ export default function MainPage() {
 
   const [search, setSearch] = useState('');
 
-  function handleSearch(newSearch: string) {
+  const handleSearch = useCallback((newSearch: string) => {
     setSearch(newSearch);
-  }
+  }, []);
 
   return (
     <div>
@@ -47,8 +46,6 @@ export default function MainPage() {
 
       <Search onChange={handleSearch} />
       <YearSelector />
-
-      <Sort />
 
       <Modal ref={modalRef}>
         <ColumnConfig modalRef={modalRef} />
