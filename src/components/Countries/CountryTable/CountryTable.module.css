@@ -1,0 +1,30 @@
+.tableWrapper {
+  margin: 10px;
+  border: 1px solid #000;
+  border-bottom: none;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  position: relative;
+}
+
+.tableItem {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.tableItem > div {
+  flex: 3;
+  padding: 2px;
+  border-bottom: 1px solid #000;
+}
+.tableItem > div:first-of-type {
+  flex: 1;
+}
+.tableItem > div:not(:last-of-type) {
+  border-right: 1px solid #000;
+}

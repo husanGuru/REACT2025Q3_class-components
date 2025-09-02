@@ -1,66 +1,58 @@
-import { useRef } from 'react';
-import { ModalRef } from '../../types/modal.types';
-import FormUncontrolled from '../../components/FormUncontrolled/FormUncontrolled';
-import Form from '../../components/Form/Form';
-import { Modal } from '../../components/shared';
-import FormResult from '../../components/FormResult/FormResult';
+import { getCO2Data } from 'src/api/co2';
+import ColumnConfig from 'src/components/ColumnConfig/ColumnConfig';
+import Countries from 'src/components/Countries/Countries';
+import { Modal } from 'src/components/shared';
+import Loading from 'src/components/shared/Loading/Loading';
+import { ModalRef } from 'src/types/modal.types';
+import { useQuery } from '@tanstack/react-query';
+import { Suspense, useCallback, useRef, useState } from 'react';
 
 import styles from './page.module.css';
-import useFormStore from '../../store/form';
-import useFormUncontrolledStore from '../../store/formUncontrolled';
+import useColumns from 'src/store/columns';
+import YearSelector from 'src/components/YearSelector/YearSelector';
+import Search from 'src/components/Search/Search';
 
 export default function MainPage() {
-  const modalRefUncontrolled = useRef<ModalRef>(null);
-  const modalRefControlled = useRef<ModalRef>(null);
+  const modalRef = useRef<ModalRef>(null);
 
-  const formControlledData = useFormStore((selector) => selector.form);
-  const formUnControlledData = useFormUncontrolledStore(
-    (selector) => selector.form
-  );
+  const columns = useColumns((selector) => selector.columns);
 
-  const isformControlledNew = useFormStore((selector) => selector.isNew);
-  const isformUnControlledNew = useFormUncontrolledStore(
-    (selector) => selector.isNew
-  );
+  const query = useQuery({
+    queryKey: ['co2-data'],
+    queryFn: ({ signal }) => getCO2Data(signal),
+  });
+
+  const [search, setSearch] = useState('');
+
+  const handleSearch = useCallback((newSearch: string) => {
+    setSearch(newSearch);
+  }, []);
 
   return (
     <div>
-      <div className={styles.btnWrapper}>
+      <div className={styles.columnConfig}>
         <button
-          onClick={(e) => modalRefUncontrolled.current?.open(e)}
+          onClick={(e) => modalRef.current?.open(e)}
           className={styles.btn}
         >
-          uncontrolled form
+          Configure columns
         </button>
-        <button
-          onClick={(e) => modalRefControlled.current?.open(e)}
-          className={styles.btn}
-        >
-          controlled form (react-hook-form)
-        </button>
+        <div className={styles.columns}>
+          {columns.map((column) => (
+            <span key={column}>{column}</span>
+          ))}
+        </div>
       </div>
 
-      <div className={styles.result}>
-        <FormResult
-          data={formUnControlledData}
-          isNew={isformUnControlledNew}
-          title="Uncontrolled form result"
-        />
-        <FormResult
-          data={formControlledData}
-          isNew={isformControlledNew}
-          title="Controlled form result"
-        />
-      </div>
+      <Search onChange={handleSearch} />
+      <YearSelector />
 
-      <Modal ref={modalRefUncontrolled}>
-        <FormUncontrolled
-          onSubmit={() => modalRefUncontrolled.current?.close()}
-        />
+      <Modal ref={modalRef}>
+        <ColumnConfig modalRef={modalRef} />
       </Modal>
-      <Modal ref={modalRefControlled}>
-        <Form onSubmit={() => modalRefControlled.current?.close()} />
-      </Modal>
+      <Suspense fallback={<Loading />}>
+        <Countries query={query} search={search} />
+      </Suspense>
     </div>
   );
 }

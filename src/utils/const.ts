@@ -1,3 +1,17 @@
+export const API_URL =
+  'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json';
+
+export const NA = 'N/A';
+
+export const COLUMNS = [
+  'methane',
+  'methane_per_capita',
+  'oil_co2',
+  'oil_co2_per_capita',
+  'temperature_change_from_co2',
+  'total_ghg',
+];
+
 export const COUNTRIES = [
   { name: 'Afghanistan', value: 'afg' },
   { name: 'Albania', value: 'alb' },

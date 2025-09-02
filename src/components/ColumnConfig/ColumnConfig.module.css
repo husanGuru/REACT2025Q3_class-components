@@ -1,0 +1,10 @@
+.config {
+  padding: 15px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.config select {
+  min-height: 150px;
+}

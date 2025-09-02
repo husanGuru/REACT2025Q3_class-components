@@ -1,69 +1,54 @@
-# React + TypeScript + Vite
+# You can use ready json file for faster checks
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+uncomment necessary lines in src\api\co2.ts
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+# Initial Profiling with React Dev Tools Profiler
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+search by name: 40.1 ms
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+sorting: 911.8 ms
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+filtering by year: 12.4 ms
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+updating columns: 829.7 ms
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Search: 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+![alt text](profiler/before/search.png)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+Sorting: 
+
+![alt text](profiler/before/sort.png)
+
+Filtering by year: 
+
+![alt text](profiler/before/filter_year.png)
+
+updating columns: 
+
+![alt text](profiler/before/columns.png)
+
+# Update the App with React.memo and useMemo
+
+search by name: 14.4 ms
+sorting: 121.4 ms
+filtering by year: 13.1 ms
+updating columns: 785.3 ms
+
+Search: 
+
+![alt text](profiler/after/search.png)
+
+Sorting: 
+
+![alt text](profiler/after/sort.png)
+
+Filtering by year: 
+
+![alt text](profiler/after/filter_year.png)
+
+updating columns: 
+
+![alt text](profiler/after/columns.png)
